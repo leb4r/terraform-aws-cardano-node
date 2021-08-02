@@ -8,10 +8,12 @@ This project has not be audited for security by a third-party. Use at your own d
 
 ## Usage
 
+This example my be using a `version` that is out-of-date, check [the registry page](https://registry.terraform.io/modules/leb4r/ec2-cardano-node/aws/latest) for the most recent usage.
+
 ```hcl
 module "ec2-cardano-node" {
   source  = "leb4r/ec2-cardano-node/aws"
-  version = "0.0.1"
+  version = "0.0.2"
   # insert the 4 required variables here
 }
 ```
