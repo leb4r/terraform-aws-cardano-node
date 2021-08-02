@@ -1,0 +1,49 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Build Matrix
+        id: matrix
+        run: |
+          DIRS=$(python -c "import json; import glob; import re; print(json.dumps([x.replace('/versions.tf', '') for x in glob.glob('./**/versions.tf', recursive=True) if not re.match(r'^.+/_', x)]))")
+          echo "::set-output name=directories::$DIRS"
+    outputs:
+      directories: ${{ steps.matrix.outputs.directories }}
+
+  pre-commit:
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: ${{ fromJson(needs.build-matrix.outputs.directories )}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: "0.15.4"
+      - name: Install pre-commit and dependencies
+        run: |
+          pip install pre-commit
+          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.13.0/terraform-docs-v0.13.0-$(uname)-amd64.tar.gz && tar -xzf terraform-docs.tar.gz && chmod +x terraform-docs && sudo mv terraform-docs /usr/bin/
+      - name: Execute pre-commit
+        if: ${{ matrix.directory != '.' }}
+        run: pre-commit run terraform_validate --color=always --show-diff-on-failure --files ${{ matrix.directory }}/*
+      - name: Execute pre-commit
+        if: ${{ matrix.directory == '.' }}
+        run: pre-commit run terraform_validate --color=always --show-diff-on-failure --files $(ls *.tf)
