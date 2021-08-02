@@ -1,0 +1,18 @@
+name: bridgecrew
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  bridgecrew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Bridgecrew
+        uses: bridgecrewio/bridgecrew-action@master
+        with:
+          soft_fail: true
