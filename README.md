@@ -6,6 +6,16 @@ Terraform module that provisions a Cardano node on an EC2 instance.
 
 This project has not be audited for security by a third-party. Use at your own discretion.
 
+## Usage
+
+```hcl
+module "ec2-cardano-node" {
+  source  = "leb4r/ec2-cardano-node/aws"
+  version = "0.0.1"
+  # insert the 4 required variables here
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
