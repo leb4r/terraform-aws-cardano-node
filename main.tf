@@ -51,6 +51,7 @@ module "ec2_instance" {
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [module.security_group.security_group_id]
   monitoring                  = var.enable_monitoring
+  ebs_optimized               = var.ebs_optimized
   user_data_base64            = base64encode(data.cloudinit_config.user_data.rendered)
   associate_public_ip_address = var.associate_public_ip_address
   instance_type               = var.instance_type

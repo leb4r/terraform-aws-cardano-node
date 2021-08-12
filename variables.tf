@@ -36,6 +36,12 @@ variable "enable_monitoring" {
   default     = true
 }
 
+variable "ebs_optimized" {
+  description = "Whether the EC2 instance is EBS optimized"
+  type        = bool
+  default     = true
+}
+
 variable "associate_public_ip_address" {
   description = "Whether to associate a public IPv4 address for the node"
   type        = bool
