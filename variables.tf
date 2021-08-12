@@ -33,7 +33,7 @@ variable "route53_record_name" {
 variable "enable_monitoring" {
   description = "Whether to enable detailed monitoring for the node"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "associate_public_ip_address" {
