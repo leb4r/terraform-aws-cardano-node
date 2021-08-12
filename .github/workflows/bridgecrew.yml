@@ -16,4 +16,10 @@ jobs:
       - name: Run Bridgecrew
         uses: bridgecrewio/bridgecrew-action@master
         with:
+          api-key: ${{ secrets.BRIDGECREW_API_TOKEN }}
           soft_fail: true
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_SERVER_URL: https://github.com
