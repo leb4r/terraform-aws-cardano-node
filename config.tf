@@ -23,6 +23,11 @@ module "config_bucket" {
     enabled = true
   }
 
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
   tags = var.tags
 }
 
