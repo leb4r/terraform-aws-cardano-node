@@ -61,8 +61,8 @@ module "ec2_instance" {
     {
       volume_type = "gp2",
       volume_size = var.root_volume_size
-      encrypted   = var.ebs_encrypted
-      kms_key_id  = var.ebs_kms_key_id
+      encrypted   = true
+      kms_key_id  = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
     }
   ]
 

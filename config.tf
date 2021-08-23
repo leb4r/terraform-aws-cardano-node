@@ -23,6 +23,15 @@ module "config_bucket" {
     enabled = true
   }
 
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
