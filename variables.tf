@@ -28,6 +28,20 @@ variable "route53_record_name" {
   default     = ""
 }
 
+# encryption
+
+variable "create_kms_key" {
+  description = "Set to `false` to use separate KMS key"
+  type        = bool
+  default     = true
+}
+
+variable "kms_key_arn" {
+  description = "The ARN of the KMS CMK to use for Encryption"
+  type        = string
+  default     = ""
+}
+
 # instance configuration
 
 variable "enable_monitoring" {
@@ -70,18 +84,6 @@ variable "data_volume_size" {
   description = "Size of data volume of the node"
   type        = number
   default     = 30
-}
-
-variable "ebs_encrypted" {
-  description = "Set to `true` to encrypt the EBS volumes attached to the node"
-  type        = bool
-  default     = null
-}
-
-variable "ebs_kms_key_id" {
-  description = "The ID of the KMS CMK to use for EBS volume encryption"
-  type        = string
-  default     = null
 }
 
 ## cardano node configuration

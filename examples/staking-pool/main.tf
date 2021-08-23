@@ -23,6 +23,8 @@ module "vpc" {
   private_subnets = local.private_subnet_cidrs
   public_subnets  = local.public_subnet_cidrs
 
+  map_public_ip_on_launch = false
+
   enable_ipv6 = false
 
   enable_nat_gateway = false
@@ -85,8 +87,7 @@ module "relay_node" {
   subnet_id                   = module.vpc.public_subnets[count.index]
   associate_public_ip_address = true
 
-  ebs_encrypted  = true
-  ebs_kms_key_id = module.encryption_key.key_arn
+  kms_key_arn = module.encryption_key.key_arn
 
   create_route53_record = true
   route53_zone_id       = module.dns.route53_zone_zone_id[local.public_zone_name]
@@ -101,8 +102,7 @@ module "block_producer" {
   subnet_id                   = module.vpc.private_subnets[count.index]
   associate_public_ip_address = false
 
-  ebs_encrypted  = true
-  ebs_kms_key_id = module.encryption_key.key_arn
+  kms_key_arn = module.encryption_key.key_arn
 
   create_route53_record = true
   route53_zone_id       = module.dns.route53_zone_zone_id[local.private_zone_name]
