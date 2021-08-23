@@ -1,8 +1,9 @@
 resource "aws_ebs_volume" "this" {
+  #checkov:skip=CKV2_AWS_9:EBS volume is being passed to backup module
   availability_zone = data.aws_subnet.this.availability_zone
   size              = var.data_volume_size
-  encrypted         = var.ebs_encrypted
-  kms_key_id        = var.ebs_kms_key_id
+  encrypted         = true
+  kms_key_id        = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
   tags              = var.tags
 }
 

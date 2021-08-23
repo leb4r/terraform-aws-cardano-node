@@ -8,5 +8,6 @@ resource "aws_route53_record" "this" {
   name    = "${local.route53_record_name}.${join("", data.aws_route53_zone.this[*].name)}"
   type    = "A"
   ttl     = "300"
+  #checkov:skip=CKV2_AWS_23:Record is pointing to EC2 private IP
   records = [module.ec2_instance.private_ip[0]]
 }
