@@ -41,16 +41,18 @@ module "config_bucket" {
 }
 
 resource "aws_s3_bucket_object" "topology" {
-  bucket  = module.config_bucket.s3_bucket_id
-  key     = "${var.cardano_network}-topology.json"
-  content = local.cardano_topology_json
-  tags    = var.tags
+  bucket     = module.config_bucket.s3_bucket_id
+  key        = "${var.cardano_network}-topology.json"
+  content    = local.cardano_topology_json
+  kms_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+  tags       = var.tags
 }
 
 resource "aws_s3_bucket_object" "compose" {
-  bucket = module.config_bucket.s3_bucket_id
-  key    = "docker-compose.yml"
-  tags   = var.tags
+  bucket     = module.config_bucket.s3_bucket_id
+  key        = "docker-compose.yml"
+  kms_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+  tags       = var.tags
 
   content = templatefile("${path.module}/templates/docker-compose.yml.tpl", {
     cardano_network      = var.cardano_network,
