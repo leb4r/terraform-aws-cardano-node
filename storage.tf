@@ -7,7 +7,7 @@ resource "aws_ebs_volume" "this" {
   tags              = var.tags
 }
 
-data "aws_iam_policy_document" "attach_data_volume" {
+data "aws_iam_policy_document" "attach_data_volume_policy" {
   statement {
     effect = "Allow"
     actions = [
@@ -21,8 +21,8 @@ data "aws_iam_policy_document" "attach_data_volume" {
   }
 }
 
-resource "aws_iam_policy" "attach_data_volume" {
+resource "aws_iam_policy" "attach_data_volume_policy" {
   name_prefix = "cardano-node-attach-data-volume-"
-  policy      = data.aws_iam_policy_document.attach_data_volume.json
+  policy      = data.aws_iam_policy_document.attach_data_volume_policy.json
   tags        = var.tags
 }

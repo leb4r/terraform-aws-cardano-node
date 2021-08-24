@@ -10,7 +10,7 @@ module "encryption_key" {
   enable_key_rotation     = true
 }
 
-data "aws_iam_policy_document" "encryption_key_access" {
+data "aws_iam_policy_document" "encryption_key_access_policy" {
   statement {
     sid    = "AllowUseOfEncryptionKey"
     effect = "Allow"
@@ -26,8 +26,8 @@ data "aws_iam_policy_document" "encryption_key_access" {
   }
 }
 
-resource "aws_iam_policy" "encryption_key_access" {
+resource "aws_iam_policy" "encryption_key_access_policy" {
   name_prefix = "cardano-node-encryption-key-access-policy"
-  policy      = data.aws_iam_policy_document.encryption_key_access.json
+  policy      = data.aws_iam_policy_document.encryption_key_access_policy.json
   tags        = var.tags
 }
