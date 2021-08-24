@@ -40,5 +40,5 @@ resource "aws_iam_role_policy_attachment" "attach_data_volume" {
 
 resource "aws_iam_role_policy_attachment" "access_encryption_key" {
   role       = aws_iam_role.cardano_node.name
-  policy_arn = aws_iam_policy.attach_data_volume.arn
+  policy_arn = aws_iam_policy.encryption_key_access.arn
 }
