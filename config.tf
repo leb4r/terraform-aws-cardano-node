@@ -26,7 +26,7 @@ module "config_bucket" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+        kms_master_key_id = local.kms_key_arn
         sse_algorithm     = "aws:kms"
       }
     }
@@ -44,14 +44,14 @@ resource "aws_s3_bucket_object" "topology" {
   bucket     = module.config_bucket.s3_bucket_id
   key        = "${var.cardano_network}-topology.json"
   content    = local.cardano_topology_json
-  kms_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+  kms_key_id = local.kms_key_arn
   tags       = var.tags
 }
 
 resource "aws_s3_bucket_object" "compose" {
   bucket     = module.config_bucket.s3_bucket_id
   key        = "docker-compose.yml"
-  kms_key_id = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+  kms_key_id = local.kms_key_arn
   tags       = var.tags
 
   content = templatefile("${path.module}/templates/docker-compose.yml.tpl", {

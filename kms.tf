@@ -10,6 +10,10 @@ module "encryption_key" {
   enable_key_rotation     = true
 }
 
+locals {
+  kms_key_arn = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+}
+
 data "aws_iam_policy_document" "encryption_key_access_policy" {
   statement {
     sid    = "AllowUseOfEncryptionKey"
@@ -22,7 +26,23 @@ data "aws_iam_policy_document" "encryption_key_access_policy" {
       "kms:DescribeKey"
     ]
 
-    resources = [var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn]
+    resources = [local.kms_key_arn]
+  }
+
+  statement {
+    sid    = "AllowCreateGrant"
+    effect = "Allow"
+    actions = [
+      "kms:CreateGrant"
+    ]
+
+    resources = [local.kms_key_arn]
+
+    condition {
+      test     = "Bool"
+      variable = "kms:GrantIsForAWSResource"
+      values   = [true]
+    }
   }
 }
 
