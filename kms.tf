@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "encryption_key_access" {
     actions = [
       "kms:Decrypt",
       "kms:Encrypt",
-      "kmsReEncrypt",
+      "kms:ReEncrypt",
       "kms:GenerateDataKey*",
       "kms:DescribeKey"
     ]
