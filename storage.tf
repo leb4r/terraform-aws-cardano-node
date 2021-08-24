@@ -3,7 +3,7 @@ resource "aws_ebs_volume" "this" {
   availability_zone = data.aws_subnet.this.availability_zone
   size              = var.data_volume_size
   encrypted         = true
-  kms_key_id        = var.create_kms_key ? module.encryption_key.key_arn : var.kms_key_arn
+  kms_key_id        = local.kms_key_arn
   tags              = var.tags
 }
 
