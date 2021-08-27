@@ -94,11 +94,10 @@ variable "cardano_node_image" {
   default     = "docker.io/inputoutput/cardano-node"
 }
 
-# TODO: pin this to a specific version, currently 1.28 image has broken configuration
 variable "cardano_node_version" {
   description = "Version of cardano-node to run"
   type        = string
-  default     = "master"
+  default     = "1.29.0"
 }
 
 variable "cardano_node_port" {
