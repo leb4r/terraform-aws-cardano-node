@@ -97,7 +97,7 @@ variable "cardano_node_image" {
 variable "cardano_node_version" {
   description = "Version of cardano-node to run"
   type        = string
-  default     = "1.29.0"
+  default     = "1.30.1"
 }
 
 variable "cardano_node_port" {

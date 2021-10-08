@@ -94,7 +94,7 @@ module "ec2-cardano-node" {
 | <a name="input_cardano_network"></a> [cardano\_network](#input\_cardano\_network) | The cardano network to connect to, (e.g. `mainnet` or `testnet`) | `string` | `"mainnet"` | no |
 | <a name="input_cardano_node_image"></a> [cardano\_node\_image](#input\_cardano\_node\_image) | Container image to use for the node | `string` | `"docker.io/inputoutput/cardano-node"` | no |
 | <a name="input_cardano_node_port"></a> [cardano\_node\_port](#input\_cardano\_node\_port) | The port to listen for communication on | `number` | `3001` | no |
-| <a name="input_cardano_node_version"></a> [cardano\_node\_version](#input\_cardano\_node\_version) | Version of cardano-node to run | `string` | `"1.29.0"` | no |
+| <a name="input_cardano_node_version"></a> [cardano\_node\_version](#input\_cardano\_node\_version) | Version of cardano-node to run | `string` | `"1.30.1"` | no |
 | <a name="input_cardano_topology_json"></a> [cardano\_topology\_json](#input\_cardano\_topology\_json) | JSON string to be used as topology config | `string` | `""` | no |
 | <a name="input_create_kms_key"></a> [create\_kms\_key](#input\_create\_kms\_key) | Set to `false` to use separate KMS key | `bool` | `true` | no |
 | <a name="input_create_route53_record"></a> [create\_route53\_record](#input\_create\_route53\_record) | Set to `true` to create an A record in Route 53 for the EC2 instance | `bool` | `false` | no |
