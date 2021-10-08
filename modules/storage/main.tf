@@ -1,3 +1,12 @@
+resource "aws_ebs_volume" "this" {
+  #checkov:skip=CKV2_AWS_9:EBS volume is being passed to backup module
+  availability_zone = var.availability_zone
+  size              = var.volume_size
+  encrypted         = true
+  kms_key_id        = var.kms_key_arn
+  tags              = var.tags
+}
+
 module "backup" {
   source  = "cloudposse/backup/aws"
   version = "0.9.0"
