@@ -6,19 +6,6 @@ Terraform module that provisions infrastructure on AWS to run `cardano-node`.
 
 This project has not be audited for security by a third-party. Use at your own discretion.
 
-| Benchmark                                                                                                                                                                                                                                           | Description                                                      |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| [![Infrastructure Security](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/general)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=INFRASTRUCTURE+SECURITY) | Infrastructure Security Compliance                               |
-| [![CIS KUBERNETES](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/cis_kubernetes)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=CIS+KUBERNETES+V1.5)       | Center for Internet Security, KUBERNETES Compliance              |
-| [![CIS AWS](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=CIS+AWS+V1.2)                            | Center for Internet Security, AWS Compliance                     |
-| [![CIS AZURE](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/cis_azure)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=CIS+AZURE+V1.1)                      | Center for Internet Security, AZURE Compliance                   |
-| [![PCI-DSS](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/pci)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=PCI-DSS+V3.2)                                | Payment Card Industry Data Security Standards Compliance         |
-| [![NIST-800-53](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/nist)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=NIST-800-53)                            | National Institute of Standards and Technology Compliance        |
-| [![ISO27001](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/iso)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=ISO27001)                                   | Information Security Management System, ISO/IEC 27001 Compliance |
-| [![SOC2](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/soc2)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=SOC2)                                          | Service Organization Control 2 Compliance                        |
-| [![CIS GCP](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/cis_gcp)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=CIS+GCP+V1.1)                            | Center for Internet Security, GCP Compliance                     |
-| [![HIPAA](https://www.bridgecrew.cloud/badges/github/leb4r/terraform-aws-cardano-node/hipaa)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=leb4r%2Fterraform-aws-cardano-node&benchmark=HIPAA)                                       | Health Insurance Portability and Accountability Compliance       |
-
 ## Usage
 
 This example my be using a `version` that is out-of-date, check [the registry page](https://registry.terraform.io/modules/leb4r/cardano-node/aws/latest) for the most recent usage.
@@ -26,25 +13,25 @@ This example my be using a `version` that is out-of-date, check [the registry pa
 ```hcl
 module "cardano-node" {
   source  = "leb4r/cardano-node/aws"
-  version = "0.0.2"
-  # insert the 4 required variables here
+  version = "1.0.0"
+  # insert the required variables here
 }
 ```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-| Name                                                                      | Version   |
-| ------------------------------------------------------------------------- | --------- |
+| Name | Version |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 3.24   |
-| <a name="requirement_cloudinit"></a> [cloudinit](#requirement\_cloudinit) | >= 2.2.0  |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.24 |
+| <a name="requirement_cloudinit"></a> [cloudinit](#requirement\_cloudinit) | >= 2.2.0 |
 
 ## Providers
 
-| Name                                              | Version |
-| ------------------------------------------------- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.62.0  |
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.62.0 |
 
 ## Modules
 
@@ -60,8 +47,8 @@ module "cardano-node" {
 
 ## Resources
 
-| Name                                                                                                     | Type        |
-| -------------------------------------------------------------------------------------------------------- | ----------- |
+| Name | Type |
+|------|------|
 | [aws_subnet.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
 
 ## Inputs
