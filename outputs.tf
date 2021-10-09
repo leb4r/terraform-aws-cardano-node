@@ -1,24 +1,29 @@
 output "config_bucket_name" {
-  description = "Name of S3 bucket used to storage config"
-  value       = module.config_bucket.s3_bucket_id
+  description = "Name of S3 bucket used to store config"
+  value       = module.config.bucket_name
 }
 
 output "data_volume_id" {
   description = "ID of EBS volume used for data storage"
-  value       = aws_ebs_volume.this.id
+  value       = module.storage.id
 }
 
 output "iam_role_name" {
-  description = "IAM role name"
-  value       = aws_iam_role.cardano_node.name
-}
-
-output "instance_id" {
-  description = "EC2 Instance ID"
-  value       = module.ec2_instance.id[0]
+  description = "Name of IAM role used by the EC2 instance"
+  value       = module.iam.role_name
 }
 
 output "security_group_id" {
-  description = "Security Group ID"
-  value       = module.security_group.security_group_id
+  description = "ID of the Security Group used by EC2 instance"
+  value       = module.node.security_group_id
+}
+
+output "instance_id" {
+  description = "ID of the EC2 instance where cardano-node is runner"
+  value       = module.node.id
+}
+
+output "dns_fqdn" {
+  description = "FQDN of the node"
+  value       = module.dns.fqdn
 }
