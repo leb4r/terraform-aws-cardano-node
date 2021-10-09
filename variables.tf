@@ -108,6 +108,14 @@ variable "prometheus_ingress_cidrs" {
   default     = "0.0.0.0/0"
 }
 
+## logs
+
+variable "log_retention_in_days" {
+  description = "The number of days to keep logs in the Log Group"
+  type        = number
+  default     = 30
+}
+
 ## storage
 
 variable "data_volume_size" {

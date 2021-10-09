@@ -71,6 +71,7 @@ module "cardano-node" {
 | <a name="input_enable_monitoring"></a> [enable\_monitoring](#input\_enable\_monitoring) | Set to `false` to disable enhanced monitoring for node | `bool` | `true` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The type of instance to use for the node | `string` | `"t3.large"` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS CMK to use for encryption | `string` | `""` | no |
+| <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The number of days to keep logs in the Log Group | `number` | `30` | no |
 | <a name="input_name"></a> [name](#input\_name) | Canocial name to give to resources | `string` | `"cardano-node"` | no |
 | <a name="input_prometheus_ingress_cidrs"></a> [prometheus\_ingress\_cidrs](#input\_prometheus\_ingress\_cidrs) | Comma-delimited list of CIDR blocks from which to allow Prometheus traffic on | `string` | `"0.0.0.0/0"` | no |
 | <a name="input_root_volume_size"></a> [root\_volume\_size](#input\_root\_volume\_size) | Size of root volume of the node | `number` | `8` | no |
