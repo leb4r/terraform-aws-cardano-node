@@ -31,10 +31,11 @@ module "config" {
 }
 
 module "logs" {
-  source      = "./modules/logs"
-  kms_key_arn = local.kms_key_arn
-  name        = var.name
-  tags        = var.tags
+  source            = "./modules/logs"
+  kms_key_arn       = local.kms_key_arn
+  retention_in_days = var.log_retention_in_days
+  name              = var.name
+  tags              = var.tags
 }
 
 data "aws_subnet" "this" {
