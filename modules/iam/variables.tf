@@ -20,6 +20,11 @@ variable "kms_key_arn" {
   type        = string
 }
 
+variable "log_group_arn" {
+  description = "The ARN of the CloudWatch Log Group"
+  type        = string
+}
+
 variable "ssm_managed" {
   description = "Set to `false` to disable SSM access"
   type        = bool
