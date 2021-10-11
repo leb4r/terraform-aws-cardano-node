@@ -62,32 +62,6 @@ resource "aws_s3_bucket_object" "compose" {
   })
 }
 
-data "aws_iam_policy_document" "config_access_policy" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "s3:ListBucket"
-    ]
-
-    resources = [
-      module.config_bucket.s3_bucket_arn
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "s3:GetObject"
-    ]
-
-    resources = [
-      "${module.config_bucket.s3_bucket_arn}/*"
-    ]
-  }
-}
-
 ## usedata
 
 locals {
