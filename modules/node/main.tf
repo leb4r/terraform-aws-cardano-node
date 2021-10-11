@@ -46,29 +46,47 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-module "ec2_instance" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "2.19.0"
+resource "aws_launch_template" "this" {
+  name_prefix   = "${var.name}-lt-"
+  ebs_optimized = var.ebs_optimized
+  image_id      = data.aws_ami.amazon_linux.id
+  instance_type = var.instance_type
+  user_data     = base64encode(var.userdata)
+  tags          = var.tags
 
-  name                        = var.name
-  ami                         = data.aws_ami.amazon_linux.id
-  subnet_id                   = var.subnet_id
-  vpc_security_group_ids      = [module.security_group.security_group_id]
-  monitoring                  = var.enable_monitoring
-  ebs_optimized               = var.ebs_optimized
-  user_data_base64            = base64encode(var.userdata)
-  associate_public_ip_address = var.associate_public_ip_address
-  instance_type               = var.instance_type
-  iam_instance_profile        = aws_iam_instance_profile.cardano_node.name
+  block_device_mappings {
+    device_name = "/dev/sda1"
 
-  root_block_device = [
-    {
-      volume_type = "gp2",
+    ebs {
+      volume_type = "gp3"
       volume_size = var.root_volume_size
       encrypted   = true
       kms_key_id  = var.kms_key_arn
     }
-  ]
+  }
 
-  tags = var.tags
+  iam_instance_profile {
+    name = aws_iam_instance_profile.cardano_node.name
+  }
+
+  monitoring {
+    enabled = var.enable_monitoring
+  }
+
+  network_interfaces {
+    associate_public_ip_address = var.associate_public_ip_address
+    subnet_id                   = var.subnet_id
+    security_groups             = [module.security_group.security_group_id]
+  }
+}
+
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "3.2.0"
+  name    = var.name
+  tags    = var.tags
+
+  launch_template = {
+    name = aws_launch_template.this.name
+  }
 }
