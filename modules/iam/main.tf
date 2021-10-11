@@ -31,6 +31,31 @@ resource "aws_iam_role_policy_attachment" "ssm" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+## cloudwatch logs
+
+# see https://docs.docker.com/config/containers/logging/awslogs/#credentials
+data "aws_iam_policy_document" "cloudwatch_access" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudwatch_access" {
+  name_prefix = "${var.name}-cloudwatch-policy-"
+  policy      = data.aws_iam_policy_document.cloudwatch_access.json
+  tags        = var.tags
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_access" {
+  role       = aws_iam_role.cardano_node.name
+  policy_arn = aws_iam_policy.cloudwatch_access.arn
+}
+
 ## access config in S3
 
 data "aws_iam_policy_document" "config_access" {
