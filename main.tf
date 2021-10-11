@@ -48,6 +48,7 @@ module "iam" {
   ssm_managed       = true
   config_bucket_arn = module.config.bucket_arn
   kms_key_arn       = local.kms_key_arn
+  log_group_arn     = module.logs.log_group_arn
   name              = var.name
   tags              = var.tags
 }
