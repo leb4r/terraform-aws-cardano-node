@@ -3,7 +3,12 @@ provider "aws" {
 }
 
 locals {
+  name   = "cardano-staking-pool-example"
   region = "us-east-1"
+  azs    = ["${local.region}a", "${local.region}b"]
+
+  num_of_relays    = 2
+  num_of_producers = 2
 
   public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24"]
   private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
@@ -12,14 +17,52 @@ locals {
   public_zone_name  = "cardano-staking-pool-example.com"
 }
 
+## shared resources
+
+module "backups" {
+  source           = "../../modules/backup"
+  backup_resources = concat(module.block_producer[*].arn, module.relay_node[*].arn)
+  kms_key_arn      = module.encryption_key.key_arn
+}
+
+module "dns" {
+  source  = "terraform-aws-modules/route53/aws//modules/zones"
+  version = "2.1.0"
+
+  zones = {
+    "private-cardano-staking-pool-example.com" = {
+      comment = "private-cardano-staking-pool-example.com (private)"
+      vpc = [
+        {
+          vpc_id = module.vpc.vpc_id
+        }
+      ]
+    },
+    "cardano-staking-pool-example.com" = {
+      comment = "cardano-staking-pool-example.com (public)"
+    }
+  }
+}
+
+module "encryption_key" {
+  source = "../../modules/kms"
+  name   = local.name
+}
+
+module "logs" {
+  source      = "../../modules/logs"
+  name        = local.name
+  kms_key_arn = module.encryption_key.key_arn
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.2.0"
 
-  name = "cardano-staking-pool-example"
+  name = local.name
   cidr = "10.0.0.0/16"
 
-  azs             = ["${local.region}a", "${local.region}b"]
+  azs             = local.azs
   private_subnets = local.private_subnet_cidrs
   public_subnets  = local.public_subnet_cidrs
 
@@ -46,65 +89,6 @@ module "vpc" {
   flow_log_max_aggregation_interval    = 60
 
   vpc_tags = {
-    Name = "cardano-staking-pool"
+    Name = local.name
   }
-}
-
-module "dns" {
-  source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "2.1.0"
-
-  zones = {
-    "private-cardano-staking-pool-example.com" = {
-      comment = "private-cardano-staking-pool-example.com (private)"
-      vpc = [
-        {
-          vpc_id = module.vpc.vpc_id
-        }
-      ]
-    },
-    "cardano-staking-pool-example.com" = {
-      comment = "cardano-staking-pool-example.com (public)"
-    }
-  }
-}
-
-module "encryption_key" {
-  source  = "cloudposse/kms-key/aws"
-  version = "0.10.0"
-
-  name                    = "cardano-staking-pool"
-  description             = "Cardano Staking Pool KMS key"
-  deletion_window_in_days = 7
-  enable_key_rotation     = true
-}
-
-module "relay_node" {
-  source = "../../"
-  count  = length(local.public_subnet_cidrs)
-
-  vpc_id                      = module.vpc.vpc_id
-  subnet_id                   = module.vpc.public_subnets[count.index]
-  associate_public_ip_address = true
-
-  kms_key_arn = module.encryption_key.key_arn
-
-  create_route53_record = true
-  route53_zone_id       = module.dns.route53_zone_zone_id[local.public_zone_name]
-  route53_record_name   = "relay-${count.index}"
-}
-
-module "block_producer" {
-  source = "../../"
-  count  = length(local.private_subnet_cidrs)
-
-  vpc_id                      = module.vpc.vpc_id
-  subnet_id                   = module.vpc.private_subnets[count.index]
-  associate_public_ip_address = false
-
-  kms_key_arn = module.encryption_key.key_arn
-
-  create_route53_record = true
-  route53_zone_id       = module.dns.route53_zone_zone_id[local.private_zone_name]
-  route53_record_name   = "block-producer-${count.index}"
 }
