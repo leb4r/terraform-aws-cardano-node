@@ -26,6 +26,19 @@ yum install -y docker
 # add ec2-user to docker group
 usermod -aG docker ec2-user
 
+%{ if length(log_group_name) > 0 }
+# configure docker to log to cloudwatch
+cat > /etc/docker/daemon.json <<EOF
+{
+  "log-driver": "awslogs",
+  "log-opts": {
+    "awslogs-region": "$EC2_REGION",
+    "awslogs-group": "${log_group_name}"
+  }
+}
+EOF
+%{ endif }
+
 # start and enable docker service
 service docker start
 

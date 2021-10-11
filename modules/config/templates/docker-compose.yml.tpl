@@ -23,3 +23,8 @@ services:
       CARDANO_PORT: ${cardano_node_port}
     command:
       - run
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: ${log_group_name}
+        awslogs-region: ${region}

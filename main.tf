@@ -16,6 +16,14 @@ module "storage" {
   kms_key_arn       = local.kms_key_arn
 }
 
+module "logs" {
+  source            = "./modules/logs"
+  kms_key_arn       = local.kms_key_arn
+  retention_in_days = var.log_retention_in_days
+  name              = var.name
+  tags              = var.tags
+}
+
 module "config" {
   source            = "./modules/config"
   kms_key_arn       = local.kms_key_arn
@@ -25,17 +33,10 @@ module "config" {
   cardano_node_port    = var.cardano_node_port
   cardano_node_image   = var.cardano_node_image
   cardano_node_version = var.cardano_node_version
+  log_group_name       = module.logs.log_group_name
 
   name = var.name
   tags = var.tags
-}
-
-module "logs" {
-  source            = "./modules/logs"
-  kms_key_arn       = local.kms_key_arn
-  retention_in_days = var.log_retention_in_days
-  name              = var.name
-  tags              = var.tags
 }
 
 data "aws_subnet" "this" {
@@ -47,6 +48,7 @@ module "iam" {
   ssm_managed       = true
   config_bucket_arn = module.config.bucket_arn
   kms_key_arn       = local.kms_key_arn
+  log_group_arn     = module.logs.log_group_arn
   name              = var.name
   tags              = var.tags
 }
