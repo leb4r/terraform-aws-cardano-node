@@ -48,6 +48,8 @@ resource "aws_s3_bucket_object" "topology" {
   tags       = var.tags
 }
 
+data "aws_region" "current" {}
+
 resource "aws_s3_bucket_object" "compose" {
   bucket     = module.config_bucket.s3_bucket_id
   key        = "docker-compose.yml"
@@ -59,6 +61,8 @@ resource "aws_s3_bucket_object" "compose" {
     cardano_node_image   = var.cardano_node_image,
     cardano_node_port    = var.cardano_node_port,
     cardano_node_version = var.cardano_node_version
+    log_group_name       = var.log_group_name
+    region               = data.aws_region.current.name
   })
 }
 
@@ -82,6 +86,7 @@ data "cloudinit_config" "user_data" {
       cardano_node_version = var.cardano_node_version,
       config_bucket_name   = module.config_bucket.s3_bucket_id,
       ebs_volume_id        = var.storage_volume_id
+      log_group_name       = var.log_group_name
     })
   }
 }
