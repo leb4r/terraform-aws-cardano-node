@@ -60,8 +60,8 @@ module "node" {
   kms_key_arn                 = local.kms_key_arn
   iam_role_name               = module.iam.role_name
   associate_public_ip_address = var.associate_public_ip_address
-  userdata                    = module.config.userdata
   storage_volume_id           = module.storage.id
+  config_bucket_name          = module.config.bucket_name
   name                        = var.name
   tags                        = var.tags
 }

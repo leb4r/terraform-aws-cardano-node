@@ -46,12 +46,27 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+data "cloudinit_config" "user_data" {
+  gzip          = false
+  base64_encode = false
+
+  part {
+    content_type = "text/x-shellscript"
+    filename     = "user-data.sh"
+
+    content = templatefile("${path.module}/templates/user-data.sh.tpl", {
+      config_bucket_name = var.config_bucket_name
+      ebs_volume_id      = var.storage_volume_id
+    })
+  }
+}
+
 resource "aws_launch_template" "this" {
   name_prefix   = "${var.name}-lt-"
   ebs_optimized = var.ebs_optimized
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  user_data     = base64encode(var.userdata)
+  user_data     = base64encode(data.cloudinit_config.user_data.rendered)
   tags          = var.tags
 
   block_device_mappings {
