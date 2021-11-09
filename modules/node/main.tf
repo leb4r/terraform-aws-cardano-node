@@ -20,12 +20,6 @@ module "security_group" {
   tags = var.tags
 }
 
-resource "aws_iam_instance_profile" "cardano_node" {
-  name_prefix = "${var.name}-profile-"
-  role        = var.iam_role_name
-  tags        = var.tags
-}
-
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -46,16 +40,36 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+locals {
+  root_block_device = tolist(data.aws_ami.amazon_linux.block_device_mappings)[0].device_name
+}
+
+data "cloudinit_config" "user_data" {
+  gzip          = false
+  base64_encode = false
+
+  part {
+    content_type = "text/x-shellscript"
+    filename     = "user-data.sh"
+
+    content = templatefile("${path.module}/templates/user-data.sh.tpl", {
+      config_bucket_name = var.config_bucket_name
+      ebs_volume_id      = var.storage_volume_id
+    })
+  }
+}
+
 resource "aws_launch_template" "this" {
-  name_prefix   = "${var.name}-lt-"
-  ebs_optimized = var.ebs_optimized
-  image_id      = data.aws_ami.amazon_linux.id
-  instance_type = var.instance_type
-  user_data     = base64encode(var.userdata)
-  tags          = var.tags
+  name_prefix            = "${var.name}-lt-"
+  ebs_optimized          = var.ebs_optimized
+  image_id               = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type
+  update_default_version = true
+  user_data              = base64encode(data.cloudinit_config.user_data.rendered)
+  tags                   = var.tags
 
   block_device_mappings {
-    device_name = "/dev/sda1"
+    device_name = local.root_block_device
 
     ebs {
       volume_type = "gp3"
@@ -66,7 +80,7 @@ resource "aws_launch_template" "this" {
   }
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.cardano_node.name
+    name = var.iam_instance_profile_name
   }
 
   metadata_options {
@@ -92,6 +106,10 @@ module "ec2_instance" {
   version = "3.2.0"
   name    = var.name
   tags    = var.tags
+
+  # these override the launch template, so explicitly set them to the same value
+  iam_instance_profile = var.iam_instance_profile_name
+  instance_type        = var.instance_type
 
   launch_template = {
     name = aws_launch_template.this.name

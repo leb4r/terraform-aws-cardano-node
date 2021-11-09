@@ -65,28 +65,3 @@ resource "aws_s3_bucket_object" "compose" {
     region               = data.aws_region.current.name
   })
 }
-
-## usedata
-
-locals {
-  data_volume_device_name = "/dev/sdh"
-}
-
-data "cloudinit_config" "user_data" {
-  gzip          = false
-  base64_encode = false
-
-  part {
-    content_type = "text/x-shellscript"
-    filename     = "user-data.sh"
-
-    content = templatefile("${path.module}/templates/user-data.sh.tpl", {
-      cardano_network      = var.cardano_node_network,
-      cardano_node_image   = var.cardano_node_image,
-      cardano_node_version = var.cardano_node_version,
-      config_bucket_name   = module.config_bucket.s3_bucket_id,
-      ebs_volume_id        = var.storage_volume_id
-      log_group_name       = var.log_group_name
-    })
-  }
-}
