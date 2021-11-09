@@ -25,9 +25,8 @@ module "logs" {
 }
 
 module "config" {
-  source            = "./modules/config"
-  kms_key_arn       = local.kms_key_arn
-  storage_volume_id = module.storage.id
+  source      = "./modules/config"
+  kms_key_arn = local.kms_key_arn
 
   cardano_node_network = var.cardano_node_network
   cardano_node_port    = var.cardano_node_port
