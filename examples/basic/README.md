@@ -1,5 +1,7 @@
 # Basic Example
 
+This is the most basic example of how to use the [modules](../../modules) and should probably not be used for a production system. It uses the default VPC to deploy a single instance of [cardano-node](https://github.com/input-output-hk/cardano-node) with a public IP address.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
