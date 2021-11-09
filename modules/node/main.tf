@@ -107,8 +107,9 @@ module "ec2_instance" {
   name    = var.name
   tags    = var.tags
 
-  # this overrides the launch template, so explicitly set it to the same value
+  # these override the launch template, so explicitly set them to the same value
   iam_instance_profile = var.iam_instance_profile_name
+  instance_type        = var.instance_type
 
   launch_template = {
     name = aws_launch_template.this.name
