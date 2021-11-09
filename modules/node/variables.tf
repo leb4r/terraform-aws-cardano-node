@@ -9,6 +9,12 @@ variable "config_bucket_name" {
   type        = string
 }
 
+variable "data_volume_size" {
+  description = "The amount of EBS storage to allocate"
+  type        = number
+  default     = 30
+}
+
 variable "ebs_optimized" {
   description = "Set to `false` is disable EBS optimized feature"
   type        = bool
@@ -57,11 +63,6 @@ variable "root_volume_size" {
 
 variable "subnet_id" {
   description = "ID of Subnet to deploy node in"
-  type        = string
-}
-
-variable "storage_volume_id" {
-  description = "ID of an EBS volume specifically for storage"
   type        = string
 }
 

@@ -20,6 +20,19 @@ module "security_group" {
   tags = var.tags
 }
 
+data "aws_subnet" "this" {
+  id = var.subnet_id
+}
+
+resource "aws_ebs_volume" "this" {
+  #checkov:skip=CKV2_AWS_9:EBS volume is being passed to backup module
+  availability_zone = data.aws_subnet.this.availability_zone
+  size              = var.data_volume_size
+  encrypted         = true
+  kms_key_id        = var.kms_key_arn
+  tags              = var.tags
+}
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -41,7 +54,8 @@ data "aws_ami" "amazon_linux" {
 }
 
 locals {
-  root_block_device = tolist(data.aws_ami.amazon_linux.block_device_mappings)[0].device_name
+  root_block_device_name = tolist(data.aws_ami.amazon_linux.block_device_mappings)[0].device_name
+  data_block_device_name = "/dev/sdh"
 }
 
 data "cloudinit_config" "user_data" {
@@ -53,8 +67,8 @@ data "cloudinit_config" "user_data" {
     filename     = "user-data.sh"
 
     content = templatefile("${path.module}/templates/user-data.sh.tpl", {
-      config_bucket_name = var.config_bucket_name
-      ebs_volume_id      = var.storage_volume_id
+      config_bucket_name     = var.config_bucket_name
+      data_block_device_name = local.data_block_device_name
     })
   }
 }
@@ -69,7 +83,7 @@ resource "aws_launch_template" "this" {
   tags                   = var.tags
 
   block_device_mappings {
-    device_name = local.root_block_device
+    device_name = local.root_block_device_name
 
     ebs {
       volume_type = "gp3"
@@ -114,4 +128,10 @@ module "ec2_instance" {
   launch_template = {
     name = aws_launch_template.this.name
   }
+}
+
+resource "aws_volume_attachment" "this" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.this.id
+  instance_id = module.ec2_instance.id
 }

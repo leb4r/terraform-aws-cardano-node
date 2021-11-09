@@ -54,13 +54,13 @@ module "cardano-node" {
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_backups"></a> [backups](#module\_backups) | ./modules/backup | n/a |
 | <a name="module_config"></a> [config](#module\_config) | ./modules/config | n/a |
 | <a name="module_dns"></a> [dns](#module\_dns) | ./modules/dns | n/a |
 | <a name="module_iam"></a> [iam](#module\_iam) | ./modules/iam | n/a |
 | <a name="module_kms"></a> [kms](#module\_kms) | ./modules/kms | n/a |
 | <a name="module_logs"></a> [logs](#module\_logs) | ./modules/logs | n/a |
 | <a name="module_node"></a> [node](#module\_node) | ./modules/node | n/a |
-| <a name="module_storage"></a> [storage](#module\_storage) | ./modules/storage | n/a |
 
 ## Resources
 

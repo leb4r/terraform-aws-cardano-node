@@ -9,13 +9,6 @@ module "kms" {
   tags           = var.tags
 }
 
-module "storage" {
-  source            = "./modules/storage"
-  availability_zone = data.aws_subnet.this.availability_zone
-  volume_size       = var.data_volume_size
-  kms_key_arn       = local.kms_key_arn
-}
-
 module "logs" {
   source            = "./modules/logs"
   kms_key_arn       = local.kms_key_arn
@@ -59,7 +52,7 @@ module "node" {
   kms_key_arn                 = local.kms_key_arn
   iam_instance_profile_name   = module.iam.instance_profile_name
   associate_public_ip_address = var.associate_public_ip_address
-  storage_volume_id           = module.storage.id
+  data_volume_size            = var.data_volume_size
   config_bucket_name          = module.config.bucket_name
   name                        = var.name
   tags                        = var.tags
@@ -71,4 +64,13 @@ module "dns" {
   route53_zone_id       = var.route53_zone_id
   route53_record_name   = var.route53_record_name
   ip_address            = module.node.private_ip_address
+}
+
+module "backups" {
+  source      = "./modules/backup"
+  kms_key_arn = local.kms_key_arn
+
+  backup_resources = [
+    module.node.arn
+  ]
 }
