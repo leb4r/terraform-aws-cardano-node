@@ -20,12 +20,6 @@ module "security_group" {
   tags = var.tags
 }
 
-resource "aws_iam_instance_profile" "cardano_node" {
-  name_prefix = "${var.name}-profile-"
-  role        = var.iam_role_name
-  tags        = var.tags
-}
-
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -86,7 +80,7 @@ resource "aws_launch_template" "this" {
   }
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.cardano_node.name
+    name = var.iam_instance_profile_name
   }
 
   metadata_options {
@@ -112,6 +106,9 @@ module "ec2_instance" {
   version = "3.2.0"
   name    = var.name
   tags    = var.tags
+
+  # this overrides the launch template, so explicitly set it to the same value
+  iam_instance_profile = var.iam_instance_profile_name
 
   launch_template = {
     name = aws_launch_template.this.name
