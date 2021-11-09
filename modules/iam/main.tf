@@ -95,33 +95,6 @@ resource "aws_iam_role_policy_attachment" "config_access" {
   policy_arn = aws_iam_policy.config_access.arn
 }
 
-## attach EBS volume
-
-data "aws_iam_policy_document" "attach_data_volume" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ec2:AttachVolume",
-      "ec2:DetachVolume"
-    ]
-    resources = [
-      "arn:aws:ec2:*:*:volume/*",
-      "arn:aws:ec2:*:*:instance/*"
-    ]
-  }
-}
-
-resource "aws_iam_policy" "attach_data_volume" {
-  name_prefix = "${var.name}-attach-data-volume-policy-"
-  policy      = data.aws_iam_policy_document.attach_data_volume.json
-  tags        = var.tags
-}
-
-resource "aws_iam_role_policy_attachment" "attach_data_volume" {
-  role       = aws_iam_role.cardano_node.name
-  policy_arn = aws_iam_policy.attach_data_volume.arn
-}
-
 ## access kms key
 
 data "aws_iam_policy_document" "access_kms_key" {
