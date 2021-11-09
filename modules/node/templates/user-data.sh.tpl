@@ -4,15 +4,14 @@ set -ex
 
 exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
-EC2_INSTANCE_ID="$(curl -s http://instance-data/latest/meta-data/instance-id)"
-EC2_AVAILABILITY_ZONE="$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)"
+EC2_TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+EC2_INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $EC2_TOKEN" http://instance-data/latest/meta-data/instance-id)
+EC2_AVAILABILITY_ZONE=$(curl -s -H "X-aws-ec2-metadata-token: $EC2_TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
 EC2_REGION="$${EC2_AVAILABILITY_ZONE::-1}"
 
 CARDANO_ROOT="/srv/cardano-node"
 CARDANO_CONFIG="$CARDANO_ROOT/config"
 CARDANO_DATA="$CARDANO_ROOT/data"
-
-CARDANO_NETWORK="${cardano_network}"
 
 DEVICE_NAME="/dev/sdh"
 DEVICE_LABEL="cardano-root"
@@ -26,19 +25,6 @@ yum install -y docker
 # add ec2-user to docker group
 usermod -aG docker ec2-user
 
-%{ if length(log_group_name) > 0 }
-# configure docker to log to cloudwatch
-cat > /etc/docker/daemon.json <<EOF
-{
-  "log-driver": "awslogs",
-  "log-opts": {
-    "awslogs-region": "$EC2_REGION",
-    "awslogs-group": "${log_group_name}"
-  }
-}
-EOF
-%{ endif }
-
 # start and enable docker service
 service docker start
 
@@ -46,9 +32,6 @@ service docker start
 
 curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-
-# pull cardano-node image
-docker pull ${cardano_node_image}:${cardano_node_version}
 
 # attach ebs volume
 aws ec2 attach-volume --region $EC2_REGION --device $DEVICE_NAME --instance-id $EC2_INSTANCE_ID --volume-id ${ebs_volume_id}
