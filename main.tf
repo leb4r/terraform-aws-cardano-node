@@ -58,7 +58,7 @@ module "node" {
   vpc_id                      = var.vpc_id
   subnet_id                   = var.subnet_id
   kms_key_arn                 = local.kms_key_arn
-  iam_role_name               = module.iam.role_name
+  iam_instance_profile_name   = module.iam.instance_profile_name
   associate_public_ip_address = var.associate_public_ip_address
   storage_volume_id           = module.storage.id
   config_bucket_name          = module.config.bucket_name

@@ -21,8 +21,8 @@ variable "enable_monitoring" {
   default     = true
 }
 
-variable "iam_role_name" {
-  description = "Name of the IAM role for the node"
+variable "iam_instance_profile_name" {
+  description = "Name of the IAM instance profile to attach to the node"
   type        = string
 }
 
