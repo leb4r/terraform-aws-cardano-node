@@ -46,6 +46,10 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+locals {
+  root_block_device = tolist(data.aws_ami.amazon_linux.block_device_mappings)[0].device_name
+}
+
 data "cloudinit_config" "user_data" {
   gzip          = false
   base64_encode = false
@@ -62,15 +66,16 @@ data "cloudinit_config" "user_data" {
 }
 
 resource "aws_launch_template" "this" {
-  name_prefix   = "${var.name}-lt-"
-  ebs_optimized = var.ebs_optimized
-  image_id      = data.aws_ami.amazon_linux.id
-  instance_type = var.instance_type
-  user_data     = base64encode(data.cloudinit_config.user_data.rendered)
-  tags          = var.tags
+  name_prefix            = "${var.name}-lt-"
+  ebs_optimized          = var.ebs_optimized
+  image_id               = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type
+  update_default_version = true
+  user_data              = base64encode(data.cloudinit_config.user_data.rendered)
+  tags                   = var.tags
 
   block_device_mappings {
-    device_name = "/dev/sda1"
+    device_name = local.root_block_device
 
     ebs {
       volume_type = "gp3"
