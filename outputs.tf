@@ -5,7 +5,7 @@ output "config_bucket_name" {
 
 output "data_volume_id" {
   description = "ID of EBS volume used for data storage"
-  value       = module.storage.id
+  value       = module.node.data_volume_id
 }
 
 output "iam_role_name" {
