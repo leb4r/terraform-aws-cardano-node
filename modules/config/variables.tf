@@ -49,11 +49,6 @@ variable "kms_key_arn" {
   type        = string
 }
 
-variable "storage_volume_id" {
-  description = "ID of EBS volume that is used for storage, used in userdata"
-  type        = string
-}
-
 variable "log_group_name" {
   description = "The name of the CloudWatch Log group to send Docker logs to"
   type        = string
