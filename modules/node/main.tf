@@ -69,6 +69,12 @@ resource "aws_launch_template" "this" {
     name = aws_iam_instance_profile.cardano_node.name
   }
 
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+  }
+
   monitoring {
     enabled = var.enable_monitoring
   }
@@ -81,6 +87,7 @@ resource "aws_launch_template" "this" {
 }
 
 module "ec2_instance" {
+  #checkov:skip=CKV_AWS_79:this is explicitly set in the launch template
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "3.2.0"
   name    = var.name
