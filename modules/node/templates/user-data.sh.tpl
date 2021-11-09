@@ -13,7 +13,7 @@ CARDANO_ROOT="/srv/cardano-node"
 CARDANO_CONFIG="$CARDANO_ROOT/config"
 CARDANO_DATA="$CARDANO_ROOT/data"
 
-DEVICE_NAME="/dev/sdh"
+DEVICE_NAME="${data_block_device_name}"
 DEVICE_LABEL="cardano-root"
 
 # update packages
@@ -32,9 +32,6 @@ service docker start
 
 curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-
-# attach ebs volume
-aws ec2 attach-volume --region $EC2_REGION --device $DEVICE_NAME --instance-id $EC2_INSTANCE_ID --volume-id ${ebs_volume_id}
 
 while [[ ! -b $(readlink -f $DEVICE_NAME) ]]; do
   echo "Wating for volume attachment..."
