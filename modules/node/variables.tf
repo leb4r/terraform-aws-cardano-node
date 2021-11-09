@@ -1,17 +1,12 @@
-variable "vpc_id" {
-  description = "ID of VPC to deploy node in"
-  type        = string
-}
-
-variable "subnet_id" {
-  description = "ID of Subnet to deploy node in"
-  type        = string
-}
-
-variable "enable_monitoring" {
-  description = "Set to `false` to disable enhanced monitoring for node"
+variable "associate_public_ip_address" {
+  description = "Set to `false` to only create allocate a private IP address for the node"
   type        = bool
   default     = true
+}
+
+variable "config_bucket_name" {
+  description = "Name of S3 bucket to sync config from"
+  type        = string
 }
 
 variable "ebs_optimized" {
@@ -20,10 +15,15 @@ variable "ebs_optimized" {
   default     = true
 }
 
-variable "associate_public_ip_address" {
-  description = "Set to `false` to only create allocate a private IP address for the node"
+variable "enable_monitoring" {
+  description = "Set to `false` to disable enhanced monitoring for node"
   type        = bool
   default     = true
+}
+
+variable "iam_role_name" {
+  description = "Name of the IAM role for the node"
+  type        = string
 }
 
 variable "instance_type" {
@@ -32,27 +32,15 @@ variable "instance_type" {
   default     = "t3.large"
 }
 
+variable "kms_key_arn" {
+  description = "The ARN of the KMS CMK to use for encryption"
+  type        = string
+}
+
 variable "name" {
   description = "Canocial name to give to resources"
   type        = string
   default     = "cardano-node"
-}
-
-variable "tags" {
-  description = "Map of tags to apply to resources"
-  type        = map(string)
-  default     = {}
-}
-
-variable "root_volume_size" {
-  description = "Size of root volume of the node"
-  type        = number
-  default     = 8
-}
-
-variable "kms_key_arn" {
-  description = "The ARN of the KMS CMK to use for encryption"
-  type        = string
 }
 
 variable "prometheus_ingress_cidrs" {
@@ -61,8 +49,14 @@ variable "prometheus_ingress_cidrs" {
   default     = "0.0.0.0/0"
 }
 
-variable "iam_role_name" {
-  description = "Name of the IAM role for the node"
+variable "root_volume_size" {
+  description = "Size of root volume of the node"
+  type        = number
+  default     = 8
+}
+
+variable "subnet_id" {
+  description = "ID of Subnet to deploy node in"
   type        = string
 }
 
@@ -71,7 +65,13 @@ variable "storage_volume_id" {
   type        = string
 }
 
-variable "userdata" {
-  description = "Node's userdata script"
+variable "tags" {
+  description = "Map of tags to apply to resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "vpc_id" {
+  description = "ID of VPC to deploy node in"
   type        = string
 }
