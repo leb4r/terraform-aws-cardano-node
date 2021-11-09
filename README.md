@@ -27,7 +27,7 @@ This example my be using a `version` that is out-of-date, check [the registry pa
 ```hcl
 module "cardano-node" {
   source  = "leb4r/cardano-node/aws"
-  version = "1.0.0"
+  version = "2.0.0"
   # insert the required variables here
 }
 ```
