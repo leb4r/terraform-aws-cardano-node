@@ -31,6 +31,11 @@ module "config" {
   tags = var.tags
 }
 
+module "automation" {
+  source             = "./modules/automation"
+  config_bucket_name = module.config.bucket_name
+}
+
 data "aws_subnet" "this" {
   id = var.subnet_id
 }
