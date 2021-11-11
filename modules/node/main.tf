@@ -124,6 +124,7 @@ module "ec2_instance" {
   # these override the launch template, so explicitly set them to the same value
   iam_instance_profile = var.iam_instance_profile_name
   instance_type        = var.instance_type
+  user_data_base64     = base64encode(data.cloudinit_config.user_data.rendered)
 
   launch_template = {
     name = aws_launch_template.this.name
