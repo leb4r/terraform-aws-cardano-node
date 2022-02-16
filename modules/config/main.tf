@@ -14,7 +14,7 @@ locals {
 
 module "config_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "2.5.0"
+  version = "2.14.1"
 
   bucket_prefix = "${var.name}-config-"
   acl           = "private"
