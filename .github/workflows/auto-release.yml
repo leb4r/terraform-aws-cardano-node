@@ -1,0 +1,25 @@
+name: auto-release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR from merged commit to default branch
+        id: get-merged-pull-request
+        uses: actions-ecosystem/action-get-merged-pull-request@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Draft next release
+        uses: release-drafter/release-drafter@v5
+        with:
+          publish: ${{ !contains(steps.get-merged-pull-requests.outputs.labels, 'no-release') }}
+          prerelease: false
+          config-name: auto-release.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
