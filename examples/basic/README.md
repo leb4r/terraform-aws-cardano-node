@@ -5,13 +5,16 @@ This is the most basic example of how to use the [modules](../../modules) and sh
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.62.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.2 |
 
 ## Modules
 

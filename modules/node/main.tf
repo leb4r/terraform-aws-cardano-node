@@ -1,6 +1,6 @@
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "4.2.0"
+  version = "4.8.0"
 
   name         = var.name
   description  = "Security Group for ${var.name}"
@@ -117,7 +117,7 @@ resource "aws_launch_template" "this" {
 module "ec2_instance" {
   #checkov:skip=CKV_AWS_79:this is explicitly set in the launch template
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "3.2.0"
+  version = "3.4.0"
   name    = var.name
   tags    = var.tags
 

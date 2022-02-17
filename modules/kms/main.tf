@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "key_policy" {
 
 module "key" {
   source  = "cloudposse/kms-key/aws"
-  version = "0.10.0"
+  version = "0.12.1"
   enabled = var.create_kms_key
 
   name                    = var.name
