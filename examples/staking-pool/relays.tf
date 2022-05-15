@@ -4,6 +4,11 @@ module "relay_config" {
   kms_key_arn = module.encryption_key.key_arn
 }
 
+module "relay_automation" {
+  source             = "../../modules/automation"
+  config_bucket_name = module.relay_config.bucket_name
+}
+
 module "relay_iam" {
   source            = "../../modules/iam"
   name              = local.name
