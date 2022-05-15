@@ -1,0 +1,11 @@
+---
+schemaVersion: "2.2"
+description: Restart cardano-node service
+parameters: {}
+mainSteps:
+  - action: aws:runShellScript
+    name: RestartCardanoNode
+    inputs:
+      runCommand:
+        - cd /srv/cardano-node/config
+        - docker-compose restart

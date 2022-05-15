@@ -1,0 +1,13 @@
+---
+schemaVersion: "2.2"
+description: Update cardano-node service
+parameters: {}
+mainSteps:
+  - action: aws:runShellScript
+    name: UpdateCardanoNode
+    inputs:
+      runCommand:
+        - cd /srv/cardano-node/config
+        - aws s3 sync s3://${config_bucket}/ .
+        - docker-compose pull
+        - docker-compose restart

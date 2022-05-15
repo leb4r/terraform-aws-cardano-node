@@ -19,6 +19,7 @@ locals {
 
 ## shared resources
 
+
 module "backups" {
   source           = "../../modules/backup"
   backup_resources = concat(module.block_producer[*].arn, module.relay_node[*].arn)

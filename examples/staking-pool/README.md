@@ -22,11 +22,13 @@ No providers.
 |------|--------|---------|
 | <a name="module_backups"></a> [backups](#module\_backups) | ../../modules/backup | n/a |
 | <a name="module_block_producer"></a> [block\_producer](#module\_block\_producer) | ../../modules/node | n/a |
+| <a name="module_block_producer_automation"></a> [block\_producer\_automation](#module\_block\_producer\_automation) | ../../modules/automation | n/a |
 | <a name="module_block_producer_config"></a> [block\_producer\_config](#module\_block\_producer\_config) | ../../modules/config | n/a |
 | <a name="module_block_producer_iam"></a> [block\_producer\_iam](#module\_block\_producer\_iam) | ../../modules/iam | n/a |
 | <a name="module_dns"></a> [dns](#module\_dns) | terraform-aws-modules/route53/aws//modules/zones | 2.1.0 |
 | <a name="module_encryption_key"></a> [encryption\_key](#module\_encryption\_key) | ../../modules/kms | n/a |
 | <a name="module_logs"></a> [logs](#module\_logs) | ../../modules/logs | n/a |
+| <a name="module_relay_automation"></a> [relay\_automation](#module\_relay\_automation) | ../../modules/automation | n/a |
 | <a name="module_relay_config"></a> [relay\_config](#module\_relay\_config) | ../../modules/config | n/a |
 | <a name="module_relay_iam"></a> [relay\_iam](#module\_relay\_iam) | ../../modules/iam | n/a |
 | <a name="module_relay_node"></a> [relay\_node](#module\_relay\_node) | ../../modules/node | n/a |

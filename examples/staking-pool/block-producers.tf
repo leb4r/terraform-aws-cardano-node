@@ -17,6 +17,11 @@ module "block_producer_config" {
   EOF
 }
 
+module "block_producer_automation" {
+  source             = "../../modules/automation"
+  config_bucket_name = module.block_producer_config.bucket_name
+}
+
 module "block_producer_iam" {
   source            = "../../modules/iam"
   name              = local.name
