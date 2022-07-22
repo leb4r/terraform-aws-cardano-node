@@ -12,13 +12,20 @@ This project has not be audited for security by a third-party. Use at your own d
 
 This module is setup to be flexible. It can be used in whole, or you can opt to use the individual modules separately found in the `modules/` directory.
 
-### Basic Architecture
+### Basic Example Architecture
 
-Right now, the only supported compute type is EC2, which is outlined in the [basic example](./examples/basic). The [node module](./modules/node) finds the latest Amazon Linux AMI and provisions an EC2. The userdata is setup to install `docker` and `docker-compose` which is how [cardano-node] is orchestrated. It will also attempt to attach an EBS volume to use as storage for the ledger. Configuration (docker-compose.yml, topology.json, etc) are synced from an S3 bucket. KMS encryption is used where possible, the EBS volume is apart of a backup plan by default, and logs are written to a specific CloudWatch Log Group.
+The [basic example](./examples/basic) merely provisions an EC2 instance with a [cardano-node][] container. Some other things to note are:
+
+- targets default VPC
+- the user-data script installs `docker` and `docker-compose`, which is used to orchestrate [cardano-node][]
+- the user-data script attempts to attach an EBS volume for ledger storage which is apart of an AWS Backup plan
+- configuration (docker-compose.yml, topology.json, etc) are synced from an S3 bucket
+- KMS encryption is used where possible
+- conatainer logs are shipped to CloudWatch
 
 This is a very basic architecture, but it demonstrates the technology.
 
-![Basic Example Architecture](./docs/basic.svg)
+![Basic Example Architecture](./docs/basic-example.svg)
 
 ## Usage
 
