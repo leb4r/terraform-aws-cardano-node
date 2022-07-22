@@ -26,7 +26,6 @@ module "block_producer_iam" {
   source            = "../../modules/iam"
   name              = local.name
   kms_key_arn       = module.encryption_key.key_arn
-  log_group_arn     = module.logs.log_group_arn
   config_bucket_arn = module.block_producer_config.bucket_arn
 }
 
