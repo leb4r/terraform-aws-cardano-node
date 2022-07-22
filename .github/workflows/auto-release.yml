@@ -18,7 +18,7 @@ jobs:
       - name: Draft next release
         uses: release-drafter/release-drafter@v5
         with:
-          publish: ${{ !contains(steps.get-merged-pull-requests.outputs.labels, 'no-release') }}
+          publish: ${{ !contains(steps.get-merged-pull-request.outputs.labels, 'no-release') }}
           prerelease: false
           config-name: auto-release.yml
         env:
