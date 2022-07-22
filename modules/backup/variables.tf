@@ -11,8 +11,9 @@ variable "backup_delete_after" {
 }
 
 variable "backup_resources" {
-  type    = list(string)
-  default = []
+  description = "Resources that are apart of the backup plan"
+  type        = list(string)
+  default     = []
 }
 
 variable "backup_schedule" {

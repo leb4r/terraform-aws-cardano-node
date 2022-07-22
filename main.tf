@@ -21,11 +21,12 @@ module "config" {
   source      = "./modules/config"
   kms_key_arn = local.kms_key_arn
 
-  cardano_node_network = var.cardano_node_network
-  cardano_node_port    = var.cardano_node_port
-  cardano_node_image   = var.cardano_node_image
-  cardano_node_version = var.cardano_node_version
-  log_group_name       = module.logs.log_group_name
+  cardano_node_network       = var.cardano_node_network
+  cardano_node_port          = var.cardano_node_port
+  cardano_node_image         = var.cardano_node_image
+  cardano_node_version       = var.cardano_node_version
+  cardano_node_topology_json = var.cardano_node_topology_json
+  log_group_name             = module.logs.log_group_name
 
   name = var.name
   tags = var.tags
@@ -36,16 +37,11 @@ module "automation" {
   config_bucket_name = module.config.bucket_name
 }
 
-data "aws_subnet" "this" {
-  id = var.subnet_id
-}
-
 module "iam" {
   source            = "./modules/iam"
   ssm_managed       = true
   config_bucket_arn = module.config.bucket_arn
   kms_key_arn       = local.kms_key_arn
-  log_group_arn     = module.logs.log_group_arn
   name              = var.name
   tags              = var.tags
 }
@@ -57,8 +53,13 @@ module "node" {
   kms_key_arn                 = local.kms_key_arn
   iam_instance_profile_name   = module.iam.instance_profile_name
   associate_public_ip_address = var.associate_public_ip_address
+  enable_monitoring           = var.enable_monitoring
+  ebs_optimized               = var.ebs_optimized
   data_volume_size            = var.data_volume_size
+  instance_type               = var.instance_type
   config_bucket_name          = module.config.bucket_name
+  prometheus_ingress_cidrs    = var.prometheus_ingress_cidrs
+  root_volume_size            = var.root_volume_size
   name                        = var.name
   tags                        = var.tags
 }
@@ -72,8 +73,11 @@ module "dns" {
 }
 
 module "backups" {
-  source      = "./modules/backup"
-  kms_key_arn = local.kms_key_arn
+  source                    = "./modules/backup"
+  kms_key_arn               = local.kms_key_arn
+  backup_schedule           = var.backup_schedule
+  backup_cold_storage_after = var.backup_cold_storage_after
+  backup_delete_after       = var.backup_delete_after
 
   backup_resources = [
     module.node.arn
