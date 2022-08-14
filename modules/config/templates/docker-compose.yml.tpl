@@ -12,6 +12,7 @@ services:
       - 4444:4444
     volumes:
       - $CARDANO_ROOT/data:/opt/cardano/data
+      - $CARDANO_ROOT/ipc:/opt/cardano/ipc
       - $CARDANO_ROOT/config/${cardano_network}-topology.json:/opt/cardano/config/${cardano_network}-topology.json
     environment:
       CARDANO_SOCKET_PATH: /opt/cardano/ipc/socket
